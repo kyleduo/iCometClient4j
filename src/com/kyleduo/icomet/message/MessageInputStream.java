@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import com.google.gson.Gson;
-import com.kyleduo.icomet.message.Message.Content;
 
 public class MessageInputStream {
 	private InputStream input;

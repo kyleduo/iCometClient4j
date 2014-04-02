@@ -2,15 +2,12 @@ package com.kyleduo.icomet;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.google.gson.Gson;
 import com.kyleduo.icomet.message.Message;
 import com.kyleduo.icomet.message.MessageInputStream;
-import com.kyleduo.icomet.message.PubMessage;
 
 public class ICometClient {
 
@@ -55,9 +52,6 @@ public class ICometClient {
 
 	private ICometConf mConf;
 
-	// message queue, used to maintain messages going to publish to iComet server
-	private Queue<PubMessage> mMsgQueue;
-
 	// current status
 	private int mStatus = Status.STATUS_NEW;
 
@@ -94,7 +88,6 @@ public class ICometClient {
 		this.mICometCallback = conf.iCometCallback;
 		this.mIConnCallback = conf.iConnCallback;
 		this.mStatus = Status.STATUS_READY;
-		this.mMsgQueue = new LinkedList<PubMessage>();
 	}
 
 	/**
@@ -132,8 +125,9 @@ public class ICometClient {
 			if (mReconnTimes == 0) {
 				mIConnCallback.onSuccess();
 			} else {
+				mReconnTimes = 0;
 				mIConnCallback.onReconnectSuccess(mReconnTimes);
-				
+
 			}
 		}
 
