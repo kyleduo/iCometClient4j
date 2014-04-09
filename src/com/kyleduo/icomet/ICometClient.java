@@ -11,21 +11,21 @@ import com.kyleduo.icomet.message.MessageInputStream;
 
 public class ICometClient {
 
-	private static class Status {
+	public static class State {
 		// status for a client just created
-		static final int STATUS_NEW = 0;
+		public static final int STATE_NEW = 0;
 		// status for a prepared client
-		static final int STATUS_READY = 1;
+		public static final int STATE_READY = 1;
 		// status for a client which has connected to iComet server
-		static final int STATUS_CONNCTED = 2;
+		public static final int STATE_CONNCTED = 2;
 		// status for a client working with sending or receiving message
-		static final int STATUS_COMET = 3;
+		public static final int STATE_COMET = 3;
 		// comet was stopped manually
-		static final int STATUS_STOP = 4;
+		public static final int STATE_STOP = 4;
 		// stop the comet client
-		static final int STATUS_STOP_PENDING = 5;
+		public static final int STATE_STOP_PENDING = 5;
 		// disconnect from iComet server, usually by error
-		static final int STATUS_DISCONNECT = 6;
+		public static final int STATE_DISCONNECT = 6;
 	}
 
 	// delay for reconnection, if times of reconnection is larger than 3, treat as 3
@@ -53,7 +53,7 @@ public class ICometClient {
 	private ICometConf mConf;
 
 	// current status
-	private int mStatus = Status.STATUS_NEW;
+	private int mStatus = State.STATE_NEW;
 
 	private ICometClient() {
 
@@ -87,26 +87,22 @@ public class ICometClient {
 		this.url = buildURL(conf.conn_url);
 		this.mICometCallback = conf.iCometCallback;
 		this.mIConnCallback = conf.iConnCallback;
-		this.mStatus = Status.STATUS_READY;
+		this.mStatus = State.STATE_READY;
 	}
 
 	/**
 	 * connect to iComet server please call this method in a child thread
 	 */
 	public void connect() {
-		if (this.mStatus != Status.STATUS_READY) {
+		if (this.mStatus != State.STATE_READY) {
 			return;
 		}
 		try {
 			mConn = (HttpURLConnection) new URL(this.url).openConnection();
 			mConn.setRequestMethod("GET");
 			mConn.setDoInput(true);
-			mConn.setDoOutput(true);
-			mConn.setRequestProperty("content-type", "json");
 			mConn.connect();
-
 			mInput = new MessageInputStream(mConn.getInputStream());
-			// mOutput = new MessageOutputStream(conn.getOutputStream());
 
 		} catch (Exception e) {
 			if (mConn != null) {
@@ -119,7 +115,7 @@ public class ICometClient {
 			return;
 		}
 
-		this.mStatus = Status.STATUS_CONNCTED;
+		this.mStatus = State.STATE_CONNCTED;
 
 		if (mIConnCallback != null) {
 			if (mReconnTimes == 0) {
@@ -137,10 +133,10 @@ public class ICometClient {
 	 * start a new thread to deal with the data transfer
 	 */
 	public void comet() {
-		if (this.mStatus != Status.STATUS_CONNCTED) {
+		if (this.mStatus != State.STATE_CONNCTED) {
 			return;
 		}
-		this.mStatus = Status.STATUS_COMET;
+		this.mStatus = State.STATE_COMET;
 		new SubThread().start();
 
 	}
@@ -149,7 +145,7 @@ public class ICometClient {
 	 * close the connection to iComet server
 	 */
 	public void stopComet() {
-		mStatus = Status.STATUS_STOP_PENDING;
+		mStatus = State.STATE_STOP_PENDING;
 	}
 
 	/**
@@ -177,8 +173,7 @@ public class ICometClient {
 			public void run() {
 				mReconnTimes++;
 				if (!mIConnCallback.onReconnect(mReconnTimes)) {
-					// TODO reconnect
-					if (mStatus != Status.STATUS_READY) {
+					if (mStatus != State.STATE_READY) {
 						prepare(mConf);
 					}
 					connect();
@@ -233,7 +228,7 @@ public class ICometClient {
 			}
 
 			try {
-				while (mStatus == Status.STATUS_COMET) {
+				while (mStatus == ICometClient.State.STATE_COMET) {
 					// block here
 					Message msg = mInput.readMessage();
 
@@ -257,11 +252,12 @@ public class ICometClient {
 			} catch (Exception e) {
 				// e.printStackTrace();
 				mIConnCallback.onDisconnect();
-				mStatus = Status.STATUS_DISCONNECT;
+				mStatus = ICometClient.State.STATE_DISCONNECT;
 				reconnect();
+				return;
 			}
 
-			mStatus = Status.STATUS_STOP;
+			mStatus = ICometClient.State.STATE_STOP;
 			if (mIConnCallback != null) {
 				mIConnCallback.onStop();
 			}

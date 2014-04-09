@@ -26,9 +26,7 @@ public class Demo {
 		conf.iConnCallback = new MyConnCallback();
 		conf.iCometCallback = new MyCometCallback();
 		conf.channelAllocator = new NoneAuthChannelAllocator();
-
 		mClient.prepare(conf);
-
 		mClient.connect();
 	}
 
