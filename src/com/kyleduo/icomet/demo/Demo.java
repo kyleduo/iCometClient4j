@@ -21,8 +21,9 @@ public class Demo {
 	public static void main(String args[]) {
 		mClient = ICometClient.getInstance();
 		ICometConf conf = new ICometConf();
-		conf.host = "127.0.0.1";
+		conf.host = "www.ideawu.com";
 		conf.port = "8100";
+		conf.url = "stream";
 		conf.iConnCallback = new MyConnCallback();
 		conf.iCometCallback = new MyCometCallback();
 		conf.channelAllocator = new NoneAuthChannelAllocator();
@@ -34,6 +35,7 @@ public class Demo {
 
 		@Override
 		public void onFail(String msg) {
+			System.out.println("connection fail");
 			System.err.println(msg);
 		}
 
@@ -87,6 +89,11 @@ public class Demo {
 			System.err.println("error message arrived with type: " + msg.type);
 		}
 
+		@Override
+		public void onMsgFormatError() {
+			System.err.println("message format error");
+		}
+
 	}
 
 	public static class NoneAuthChannelAllocator implements ChannelAllocator {
@@ -94,12 +101,10 @@ public class Demo {
 		@Override
 		public Channel allocate() {
 			Channel channel = new Channel();
-			channel.cname = "63561661880299684166";
-			channel.token = "";
+			channel.cname = "public";
+			channel.token = "token";
 			channel.seq = 1;
 			return channel;
 		}
-
 	}
-
 }

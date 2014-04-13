@@ -33,7 +33,6 @@ public class MessageInputStream {
 		if (jsonData != null) {
 			msg = gson.fromJson(jsonData, Message.class);
 		}
-
 		return msg;
 
 	}

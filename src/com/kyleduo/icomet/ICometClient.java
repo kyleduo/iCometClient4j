@@ -33,11 +33,11 @@ public class ICometClient {
 	private static final int[] DELAY = { 30, 120, 600 };
 
 	// host for your iComet server
-	private String host;
-	// port of the server for iComet
-	private String port;
+//	private String host;
+//	// port of the server for iComet
+//	private String port;
 	// the URL for connection to iComet server
-	private String url;
+	private String finalUrl;
 	// record the times of reconnection
 	private int mReconnTimes = 0;
 	// channel object got from your business server
@@ -81,10 +81,10 @@ public class ICometClient {
 			conf.channelAllocator = new DefaultChannelAllocator();
 		}
 		mConf = conf;
-		this.mChannel = conf.channelAllocator.allocate();
-		this.host = conf.host;
-		this.port = conf.port;
-		this.url = buildURL(conf.conn_url);
+		if (mReconnTimes == 0) {
+			this.mChannel = conf.channelAllocator.allocate();
+		}
+		this.finalUrl = buildURL(conf.url);
 		this.mICometCallback = conf.iCometCallback;
 		this.mIConnCallback = conf.iConnCallback;
 		this.mStatus = State.STATE_READY;
@@ -98,8 +98,9 @@ public class ICometClient {
 			return;
 		}
 		try {
-			mConn = (HttpURLConnection) new URL(this.url).openConnection();
+			mConn = (HttpURLConnection) new URL(this.finalUrl).openConnection();
 			mConn.setRequestMethod("GET");
+			mConn.setConnectTimeout(3 * 60 * 1000);
 			mConn.setDoInput(true);
 			mConn.connect();
 			mInput = new MessageInputStream(mConn.getInputStream());
@@ -121,9 +122,8 @@ public class ICometClient {
 			if (mReconnTimes == 0) {
 				mIConnCallback.onSuccess();
 			} else {
-				mReconnTimes = 0;
 				mIConnCallback.onReconnectSuccess(mReconnTimes);
-
+				mReconnTimes = 0;
 			}
 		}
 
@@ -146,6 +146,16 @@ public class ICometClient {
 	 */
 	public void stopComet() {
 		mStatus = State.STATE_STOP_PENDING;
+	}
+
+	/**
+	 * stop connecting to iComet server
+	 */
+	public void stopConnect() {
+		if (mConn != null) {
+			mConn.disconnect();
+			mConn = null;
+		}
 	}
 
 	/**
@@ -192,21 +202,26 @@ public class ICometClient {
 	 *            argument
 	 * @return URL
 	 */
-	private String buildURL(String method) {
+	private String buildURL(String url) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("http://");
-		sb.append(host);
-		sb.append(":").append(port);
-		sb.append("/").append(method);
+		if (!this.mConf.host.startsWith("http://")) {
+			sb.append("http://");
+		}
+		sb.append(this.mConf.host);
+		if (!isEmpty(this.mConf.port)) {
+			sb.append(":").append(this.mConf.port);
+		}
+		if (!isEmpty(url)) {
+			sb.append("/").append(url);
+		}
 		if (mChannel == null) {
 			return sb.toString();
 		}
-		sb.append("?");
 
+		sb.append("?");
 		sb.append("cname=").append(mChannel.cname);
 		sb.append("&").append("seq=").append(mChannel.seq);
 		sb.append("&").append("token=").append(mChannel.token);
-
 		return sb.toString();
 	}
 
@@ -239,18 +254,22 @@ public class ICometClient {
 						if (msg.type.equals(Message.Type.TYPE_DATA) && msg.content != null && msg.content.length() > 0) {
 							// here comes a data message
 							Message.Content content = gson.fromJson(msg.content, Message.Content.class);
-
 							mChannel.seq++;
 							mICometCallback.onDataMsgArrived(content);
 
-						} else if (msg.type.equals(Message.Type.TYPE_429)) {
-
+						} else if (msg.type.equals(Message.Type.TYPE_NOOP)) {
+							
+						} else {
+							mICometCallback.onErrorMsgArrived(msg);
 						}
 
+					} else {
+						// TODO error data
+						
 					}
 				}
 			} catch (Exception e) {
-				// e.printStackTrace();
+				 e.printStackTrace();
 				mIConnCallback.onDisconnect();
 				mStatus = ICometClient.State.STATE_DISCONNECT;
 				reconnect();
@@ -262,6 +281,19 @@ public class ICometClient {
 				mIConnCallback.onStop();
 			}
 		}
+	}
+
+	/**
+	 * judge if the source is empty
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public boolean isEmpty(String source) {
+		if (source == null || source.length() < 1) {
+			return true;
+		}
+		return false;
 	}
 
 }

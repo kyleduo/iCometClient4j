@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e2e2e2"
+    android:padding="10dp"
+    tools:context="com.kyleduo.androiddemo.MainActivity" >
+
+    <TextView
+        android:id="@+id/hint_channel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:singleLine="true"
+        android:text="current channel: " />
+    
+    <TextView
+        android:id="@+id/hint_recevie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hint_channel"
+        android:singleLine="true"
+        android:text="message received:" />
+
+    <RelativeLayout
+        android:id="@+id/input_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/bt_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="send" />
+
+        <EditText
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/bt_send"
+            android:background="@drawable/border_bg"
+            android:gravity="top|left"
+            android:lines="3"
+            android:maxLines="4"
+            android:padding="2dp" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/messages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/input_wrapper"
+        android:layout_below="@id/hint_recevie"
+        android:layout_marginBottom="5dp"
+        android:editable="false"
+        android:gravity="left|top"
+        android:background="@drawable/border_bg"
+        android:padding="2dp" />
+
+</RelativeLayout>

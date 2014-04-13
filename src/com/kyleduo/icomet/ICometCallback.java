@@ -12,5 +12,8 @@ public interface ICometCallback {
 
 	// a error message arrived
 	public void onErrorMsgArrived(Message msg);
+	
+	// message format error, can not parse json
+	public void onMsgFormatError();
 
 }

@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e2e2e2"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="com.kyleduo.androiddemo.ChannelActivity" >
+
+    <TextView
+        android:id="@+id/hint_channel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="input channel:" />
+
+    <EditText
+        android:id="@+id/et_channel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="public" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/hint_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="input nickname" />
+
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="mobile" />
+
+    <TextView
+        android:id="@+id/hint_uid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="input uid:" />
+
+    <EditText
+        android:id="@+id/et_uid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="u3456" />
+
+    <Button
+        android:id="@+id/bt_connect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect" />
+
+</LinearLayout>
