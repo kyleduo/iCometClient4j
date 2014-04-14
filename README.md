@@ -1,13 +1,21 @@
 iCometClient4j
 ==============
 
-Client by Java/Android for iComet server. iComet server: https://github.com/ideawu/icomet
+Client of iComet server for Java/Android. iComet server: https://github.com/ideawu/icomet
 
 This project is based the iComet service which can be found in https://github.com/ideawu/icomet created by ideawu(www.ideawu.com).
 
 Simply, this project is an implements of client for iComet service. You can use it in your java project as well as Android project.
 
 If you want to know what the effect of this client is look at, there's an demo in Java prepared for running in none auth mode. Obviously, you need an iComet server. Mine is run on my mac under default configuration.
+
+### Demo
+
+There are two demos in this project for Java android Android. The one for Android is based on the one for Java by using the release jar file. AndroidDemo has implement not only the sub function but alse the pub function with the demo server in http://www.ideawu.com/demo , you can use it for a preview two. Thanks again!
+
+AndroidDemo can be your reference in your own project, but it is suggested that you should implement the logic yourself to match your own business. If there are bugs, please mail me.
+
+### Usage
 
 Here's some decription of how to use this client.
 
@@ -20,6 +28,7 @@ Before you connet to the iComet server, you should make the client prepared with
 	ICometConf conf = new ICometConf();
 	conf.host = "127.0.0.1";
 	conf.port = "8100";
+	conf.url = "stream";
 	conf.iConnCallback = new MyConnCallback();
 	conf.iCometCallback = new MyCometCallback();
 	conf.channelAllocator = new NoneAuthChannelAllocator();
@@ -56,6 +65,8 @@ As their names say, the two Callbacks is used for connection and fetching proces
 		public void onMsgArrived(Message msg);
 
 		public void onErrorMsgArrived(Message msg);
+		
+		public void onMsgFormatError();
 	}
 
 When the client is ready, just a invoke of connect() method will connect it to iComet server. If you use this client in an Android project, you should invoke this method in an children thread, otherwise you would get a NetworkOnMainThreadException.
