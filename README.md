@@ -11,7 +11,7 @@ If you want to know what the effect of this client is look at, there's an demo i
 
 ### Demo
 
-There are two demos in this project for Java android Android. The one for Android is based on the one for Java by using the release jar file. AndroidDemo has implement not only the sub function but alse the pub function with the demo server in http://www.ideawu.com/demo , you can use it for a preview two. Thanks again!
+There are two demos in this project for Java android Android. The one for Android is based on the one for Java by using the release jar file. AndroidDemo has implement not only the sub function but alse the pub function with the demo server in http://www.ideawu.com/icomet/chat.html , you can use it for a preview two. Thanks again!
 
 AndroidDemo can be your reference in your own project, but it is suggested that you should implement the logic yourself to match your own business. If there are bugs, please mail me.
 
