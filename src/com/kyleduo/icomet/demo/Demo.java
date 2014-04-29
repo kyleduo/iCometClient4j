@@ -21,7 +21,7 @@ public class Demo {
 	public static void main(String args[]) {
 		mClient = ICometClient.getInstance();
 		ICometConf conf = new ICometConf();
-		conf.host = "www.ideawu.com";
+		conf.host = "127.0.0.1";
 		conf.port = "8100";
 		conf.url = "stream";
 		conf.iConnCallback = new MyConnCallback();
@@ -101,9 +101,9 @@ public class Demo {
 		@Override
 		public Channel allocate() {
 			Channel channel = new Channel();
-			channel.cname = "public";
+			channel.cname = "kyle";
 			channel.token = "token";
-			channel.seq = 1;
+			channel.seq = 0;
 			return channel;
 		}
 	}

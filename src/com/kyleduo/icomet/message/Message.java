@@ -1,5 +1,6 @@
 package com.kyleduo.icomet.message;
 
+import java.io.Serializable;
 
 public class Message {
 	public static class Type {
@@ -16,21 +17,25 @@ public class Message {
 	public String seq;
 	public String content;
 
-	public static class Content {
-		public String uid;
-		public String nickname;
-		public String content;
+	public static class Content implements Serializable {
+		
+		private static final long serialVersionUID = 4340957908804000989L;
+		
+		public String time;
+		public String from;
+		public String text;
+		public String id;
+
 		@Override
 		public String toString() {
-			return "Content [uid=" + uid + ", nickname=" + nickname
-					+ ", content=" + content + "]";
+			return "Content [time=" + time + ", from=" + from + ", text=" + text + ", id=" + id + "]";
 		}
+
 	}
 
 	@Override
 	public String toString() {
-		return "Message [type=" + type + ", cname=" + cname + ", seq=" + seq
-				+ ", content=" + content + "]";
+		return "Message [type=" + type + ", cname=" + cname + ", seq=" + seq + ", content=" + content + "]";
 	}
 
 }
