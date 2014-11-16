@@ -82,4 +82,4 @@ Much more information will be in wiki and docs pages soon.
 Have fun with it!
 
 
-by Kyle / Duo Zhang
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-iCometClient4j-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1120)
