@@ -1,5 +1,6 @@
 iCometClient4j
-==============
+===
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-iCometClient4j-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1120)
 
 Client of iComet server for Java/Android. iComet server: https://github.com/ideawu/icomet
 
@@ -82,4 +83,3 @@ Much more information will be in wiki and docs pages soon.
 Have fun with it!
 
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-iCometClient4j-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1120)
